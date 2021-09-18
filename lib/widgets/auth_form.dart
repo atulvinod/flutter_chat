@@ -1,7 +1,11 @@
+import 'dart:io';
+
+import 'package:firebasetut/widgets/user_image_picker.dart';
 import 'package:flutter/material.dart';
 
 class AuthFormWidget extends StatefulWidget {
-  final Function(BuildContext, String, String, String, bool) submitCallback;
+  final Function(BuildContext, String, String, String, bool, File?)
+      submitCallback;
   const AuthFormWidget(this.submitCallback, {Key? key}) : super(key: key);
 
   @override
@@ -13,17 +17,26 @@ class _AuthFormWidgetState extends State<AuthFormWidget> {
   String? _userEmail = '';
   String? _userName = '';
   String? _password = '';
+  File? _userImage;
   bool _isLogin = true;
 
   _trySubmit() {
     if (!_formKey.currentState!.validate()) {
       return;
     }
+    if (_userImage == null && !_isLogin) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Please select image')));
+    }
     //To close the Soft Keyboard
     FocusScope.of(context).unfocus();
     _formKey.currentState!.save();
     widget.submitCallback(context, _userName!.trim(), _userEmail!.trim(),
-        _password!.trim(), _isLogin);
+        _password!.trim(), _isLogin, _userImage);
+  }
+
+  _pickedImage(File? file) {
+    _userImage = file;
   }
 
   @override
@@ -39,6 +52,7 @@ class _AuthFormWidgetState extends State<AuthFormWidget> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  if (!_isLogin) UserImagePicker(_pickedImage),
                   TextFormField(
                     //To uniquely identify the formfield to correct error when the
                     // other form field is removed or added to the Form Widget

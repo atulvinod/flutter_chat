@@ -26,7 +26,7 @@ class ChatMessages extends StatelessWidget {
                     documents[index]['username'],
                     FirebaseAuth.instance.currentUser!.uid ==
                         documents[index]['userId'],
-                    // To optimise the build of the listview builder
+                    // To optimise the build of the listview builder, we use key
                     key: ValueKey(documents[index].documentID),
                   ));
         });
