@@ -24,6 +24,7 @@ class ChatMessages extends StatelessWidget {
               itemBuilder: (ctx, index) => MessageBubble(
                     documents[index]['text'],
                     documents[index]['username'],
+                    documents[index]['userImage'],
                     FirebaseAuth.instance.currentUser!.uid ==
                         documents[index]['userId'],
                     // To optimise the build of the listview builder, we use key

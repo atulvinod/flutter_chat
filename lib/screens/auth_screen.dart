@@ -22,7 +22,6 @@ class _AuthScreenState extends State<AuthScreen> {
   _submitAuthForm(BuildContext ctx, String username, String email,
       String password, bool isLogin, File? userImage) async {
 // We will use the firebase auth pacakage to manage the login and signup for users
-
     UserCredential authResult;
     try {
       if (isLogin) {

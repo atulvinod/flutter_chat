@@ -23,7 +23,8 @@ class _NewMessageState extends State<NewMessage> {
       //For orderering purpose we create a createdAt field
       'createdAt': Timestamp.now(),
       'userId': FirebaseAuth.instance.currentUser!.uid,
-      'username': user['username']
+      'username': user['username'],
+      'userImage': user['image_url']
     });
 
     _messageController.clear();
