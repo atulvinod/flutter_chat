@@ -1,3 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebasetut/widgets/chat_messages.dart';
+import 'package:firebasetut/widgets/new_message.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -7,34 +10,53 @@ class ChatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        actions: [
+          DropdownButton(
+            items: [
+              DropdownMenuItem(
+                  // Value is the unique identifier to determine which item was pressed in onChanged
+                  value: 'logout',
+                  child: Container(
+                    child: Row(
+                      children: [
+                        Icon(Icons.exit_to_app),
+                        Spacer(),
+                        Text('Logout'),
+                      ],
+                    ),
+                  ))
+            ],
+            icon: Icon(
+              Icons.more_vert,
+              color: Theme.of(context).primaryIconTheme.color,
+            ),
+            onChanged: (itemIdentifier) {
+              //To signout the user using the firebase auth
+              if (itemIdentifier == 'logout') {
+                FirebaseAuth.instance.signOut();
+              }
+            },
+          )
+        ],
+      ),
       // As the firebase instance gives us a stream of data to listen to,
       // we can use the StreamBuilder widget to listen to the steam data
       // and update the widget accordingly.
-      body: StreamBuilder(
-          stream: FirebaseFirestore.instance
-              .collection('-- Collection Path -- ')
-              .snapshots(),
-          builder: (ctx, streamSnapshot) {
-            if (streamSnapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator();
-            }
-            final documents = streamSnapshot.data!.documents;
-            return ListView.builder(
-              itemCount: documents.length,
-              itemBuilder: (ctx, index) =>
-                  streamSnapshot.connectionState == ConnectionState.waiting
-                      ? CircularProgressIndicator()
-                      : Container(
-                          padding: EdgeInsets.all(10),
-                        ),
-            );
-          }),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // We can add data using the .add function of the CloudFirestore
-          FirebaseFirestore.instance.collection('-- Collection Url').add({});
-        },
+      body: Container(
+        child: Column(
+          children: [
+            Expanded(child: ChatMessages()),
+            NewMessage(),
+          ],
+        ),
       ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     // We can add data using the .add function of the CloudFirestore
+      //     FirebaseFirestore.instance.collection('-- Collection Url').add({});
+      //   },
+      // ),
     );
   }
 }

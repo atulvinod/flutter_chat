@@ -1,5 +1,6 @@
 import 'package:firebasetut/screens/auth_screen.dart';
 import 'package:firebasetut/screens/chat_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -34,7 +35,17 @@ class MyApp extends StatelessWidget {
         accentColorBrightness: Brightness.dark,
         primarySwatch: Colors.pink,
       ),
-      home: AuthScreen(),
+      home: StreamBuilder(
+          // We listen to the authentication state of the user using streams
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, userSnapshot) {
+            // We check if the userSnapshot has some data, this will happend
+            // when the user is authenticated
+            if (userSnapshot.hasData) {
+              return ChatScreen();
+            }
+            return AuthScreen();
+          }),
     );
   }
 }
