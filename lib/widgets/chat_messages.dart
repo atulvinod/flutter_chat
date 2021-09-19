@@ -10,14 +10,16 @@ class ChatMessages extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder(
         stream: FirebaseFirestore.instance
-            .collection('-- Collection Path -- eg: chats')
+            .collection('chats')
             .orderBy('createdAt', descending: true)
             .snapshots(),
         builder: (ctx, streamSnapshot) {
           if (streamSnapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return Center(child: CircularProgressIndicator());
           }
-          final documents = streamSnapshot.data!.documents;
+          final documents =
+              (streamSnapshot.data! as QuerySnapshot<Map<String, dynamic>>)
+                  .docs;
           return ListView.builder(
               reverse: true,
               itemCount: documents.length,
@@ -28,7 +30,7 @@ class ChatMessages extends StatelessWidget {
                     FirebaseAuth.instance.currentUser!.uid ==
                         documents[index]['userId'],
                     // To optimise the build of the listview builder, we use key
-                    key: ValueKey(documents[index].documentID),
+                    key: ValueKey(documents[index].id),
                   ));
         });
   }

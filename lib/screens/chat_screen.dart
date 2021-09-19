@@ -1,16 +1,28 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebasetut/widgets/chat_messages.dart';
 import 'package:firebasetut/widgets/new_message.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ChatScreen extends StatelessWidget {
+class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);
+
+  @override
+  _ChatScreenState createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text("Chat App"),
         actions: [
           DropdownButton(
             items: [
@@ -18,6 +30,7 @@ class ChatScreen extends StatelessWidget {
                   // Value is the unique identifier to determine which item was pressed in onChanged
                   value: 'logout',
                   child: Container(
+                    width: 100,
                     child: Row(
                       children: [
                         Icon(Icons.exit_to_app),

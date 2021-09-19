@@ -15,10 +15,10 @@ class _NewMessageState extends State<NewMessage> {
   _sendMessage() async {
     FocusScope.of(context).unfocus();
     final user = await FirebaseFirestore.instance
-        .collection('-- our user collection')
+        .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .get();
-    FirebaseFirestore.instance.collection(' -- Our chat collection -- ').add({
+    FirebaseFirestore.instance.collection('chats').add({
       'text': _enteredMessage,
       //For orderering purpose we create a createdAt field
       'createdAt': Timestamp.now(),
